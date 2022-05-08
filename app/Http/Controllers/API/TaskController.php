@@ -31,4 +31,28 @@ class TaskController extends BaseController
         return $this->handleResponse(new TaskResource($task), 'Task Created');
     }
 
+    public function show($id){
+        $task = Task::find($id);
+        if(is_null($task)){
+            return $this->handleError('Task not found');
+        }
+        return $this->handleResponse(new TaskResource($task), 'Task retrieved');
+    }
+
+    public function update(Request $request, Task $task){
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'name' => 'required',
+            'details' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->handleError($validator->errors());
+        }
+        $task->name = $input['name'];
+        $task->details = $input['details'];
+        $task->save();
+        return $this->handleResponse(new TaskResource($task), 'Task successfully updated!');
+    }
+
 }
