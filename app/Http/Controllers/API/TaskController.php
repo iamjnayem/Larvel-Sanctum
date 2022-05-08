@@ -25,7 +25,7 @@ class TaskController extends BaseController
         );
 
         if($validator->fails()){
-            return $this->handleError($validator->errors())
+            return $this->handleError($validator->errors());
         }
         $task = Task::create($input);
         return $this->handleResponse(new TaskResource($task), 'Task Created');
