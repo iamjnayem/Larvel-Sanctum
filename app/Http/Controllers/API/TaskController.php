@@ -16,6 +16,19 @@ class TaskController extends BaseController
     }
 
 
+    public function store(Request $request){
+        $input = $request->all();
+        $validator = Validator::make($input, [
+                'name' => 'required',
+                'details' => 'required'
+            ]
+        );
 
+        if($validator->fails()){
+            return $this->handleError($validator->errors())
+        }
+        $task = Task::create($input);
+        return $this->handleResponse(new TaskResource($task), 'Task Created');
+    }
 
 }
